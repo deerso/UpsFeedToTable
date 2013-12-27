@@ -32,6 +32,29 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FileHelpers">
+      <HintPath>..\packages\FileHelpers-Stable.2.9.9\lib\4.0\FileHelpers.dll</HintPath>
+    </Reference>
+    <Reference Include="FileHelpers.DataLink">
+      <HintPath>..\packages\FileHelpers-Stable.2.9.9\lib\4.0\FileHelpers.DataLink.dll</HintPath>
+    </Reference>
+    <Reference Include="FileHelpers.ExcelStorage">
+      <HintPath>..\packages\FileHelpers-Stable.2.9.9\lib\4.0\FileHelpers.ExcelStorage.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.Excel">
+      <HintPath>..\packages\FileHelpers-Stable.2.9.9\lib\4.0\Interop.Excel.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Interop.Office">
+      <HintPath>..\packages\FileHelpers-Stable.2.9.9\lib\4.0\Interop.Office.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="ServiceStack">
+      <HintPath>..\packages\ServiceStack.4.0.5\lib\net40\ServiceStack.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Client">
+      <HintPath>..\packages\ServiceStack.Client.4.0.5\lib\net40\ServiceStack.Client.dll</HintPath>
+    </Reference>
     <Reference Include="ServiceStack.Common">
       <HintPath>..\packages\ServiceStack.Common.4.0.5\lib\net40\ServiceStack.Common.dll</HintPath>
     </Reference>

@@ -3,8 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ServiceStack;
+using ServiceStack.Configuration;
+using ServiceStack.Data;
+using ServiceStack.DataAnnotations;
+using ServiceStack.OrmLite;
+using ServiceStack.OrmLite.SqlServer;
 using ServiceStack.Text;
 
 namespace UpsFeedToTable
@@ -24,10 +30,60 @@ namespace UpsFeedToTable
     {
         public void Run()
         {
-            var testFileName = @"\\10.0.1.10\feeds\ups\Invoice_0000007V013V012_010712.csv";
 
-            var rows = File.ReadLines(testFileName).Select(x => x.Split(new[] {','})).Select(x => new EDI_Data 
+            var testFileName = @"C:\Users\kgobe_000\SkyDrive\UPSFeeds\Invoice_0000007V013V013_010513.csv";
+      
+            var connectionString = ConfigUtils.GetConnectionString("databaseConnection");
+
+            IDbConnectionFactory connectionFactory = new OrmLiteConnectionFactory(connectionString,new SqlServerOrmLiteDialectProvider());
+            using (var db = connectionFactory.Open())
             {
+                db.CreateTableIfNotExists<EDI_Data>();
+
+                db.InsertAll(KyleFileReader.GetDataForFile(testFileName));
+            }
+        }
+
+      
+    }
+
+    public class KyleFileReader
+    {
+        public KyleFileReader()
+        {
+            
+        }
+        public static decimal ParseDecimal(string s)
+        {
+            var value = decimal.Zero;
+
+            decimal.TryParse(s, out value);
+
+            return value;
+        }
+
+        public static int ParseInt(string s)
+        {
+            var value = 0;
+            int.TryParse(s, out value);
+            return value;
+        }
+
+        public static DateTime? ParseDateTime(string s)
+        {
+            if (s.IsNullOrEmpty())
+                return null;
+            return DateTime.Parse(s);
+        }
+        public static IEnumerable<EDI_Data> GetDataForFile(string filename)
+        {
+            var lines = File.ReadLines(filename);
+
+            var data = lines.Select(x => Regex.Split(x, ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"));
+
+            return data.Select(x => new EDI_Data
+            {
+                Version = x[0],
                 RecipientNumber = x[1],
                 AccountNumber = x[2],
                 AccountCountry = x[3],
@@ -41,7 +97,7 @@ namespace UpsFeedToTable
                 TransactionDate = ParseDateTime(x[11]),
                 PickupRecordNumber = x[12],
                 LeadShipmentNumber = x[13],
-                WorldEaseNumber =  x[14],
+                WorldEaseNumber = x[14],
                 ShipmentReferenceNumber1 = x[15],
                 ShipmentReferenceNumber2 = x[16],
                 BillOptionCode = x[17],
@@ -97,7 +153,7 @@ namespace UpsFeedToTable
                 SenderCompanyName = x[67],
                 SenderAddressLine1 = x[68],
                 SenderAddressLine2 = x[69],
-                SenderCity= x[70],
+                SenderCity = x[70],
                 SenderState = x[71],
                 SenderPostal = x[72],
                 SenderCountry = x[73],
@@ -148,7 +204,7 @@ namespace UpsFeedToTable
                 ShipmentImportDate = ParseDateTime(x[118]),
                 EntryDate = ParseDateTime(x[119]),
                 DirectShipmentDate = ParseDateTime(x[120]),
-                ShipmentDeliveryDate =x[121],
+                ShipmentDeliveryDate = x[121],
                 ShipmentReleaseDate = ParseDateTime(x[122]),
                 CycleDate = x[123],
                 EFTDate = x[124],
@@ -258,41 +314,7 @@ namespace UpsFeedToTable
                 DetailKeyedBilledUnitOfMeasure = x[228],
                 OriginalServiceDescription = x[229],
             });
-
-            Console.WriteLine(rows.FirstOrDefault().Dump());
         }
-
-        public static decimal ParseDecimal(string s)
-        {
-            var value = decimal.Zero;
-
-            decimal.TryParse(s, out value);
-
-            return value;
-        }
-
-        public static int ParseInt(string s)
-        {
-            var value = 0;
-            int.TryParse(s, out value);
-            return value;
-        }
-
-        public static DateTime? ParseDateTime(string s)
-        {
-            if (s.IsNullOrEmpty())
-                return null;
-            return DateTime.Parse(s);
-        }
-    }
-
-    public class KyleFileReader
-    {
-        public KyleFileReader()
-        {
-            
-        }
-
         public static string GetFile(string fileName)
         {
             using (StreamReader reader = new StreamReader(new FileStream(fileName, FileMode.Open)))
