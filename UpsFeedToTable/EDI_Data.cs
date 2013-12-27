@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using ServiceStack.DataAnnotations;
 namespace UpsFeedToTable
 {
+    [Schema("UPS")]
     public class EDI_Data
     {
         [AutoIncrement]

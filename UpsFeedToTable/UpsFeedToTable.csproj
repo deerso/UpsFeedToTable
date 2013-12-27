@@ -32,23 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FileHelpers">
-      <HintPath>..\packages\FileHelpers-Stable.2.9.9\lib\4.0\FileHelpers.dll</HintPath>
-    </Reference>
-    <Reference Include="FileHelpers.DataLink">
-      <HintPath>..\packages\FileHelpers-Stable.2.9.9\lib\4.0\FileHelpers.DataLink.dll</HintPath>
-    </Reference>
-    <Reference Include="FileHelpers.ExcelStorage">
-      <HintPath>..\packages\FileHelpers-Stable.2.9.9\lib\4.0\FileHelpers.ExcelStorage.dll</HintPath>
-    </Reference>
-    <Reference Include="Interop.Excel">
-      <HintPath>..\packages\FileHelpers-Stable.2.9.9\lib\4.0\Interop.Excel.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="Interop.Office">
-      <HintPath>..\packages\FileHelpers-Stable.2.9.9\lib\4.0\Interop.Office.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
     <Reference Include="ServiceStack">
       <HintPath>..\packages\ServiceStack.4.0.5\lib\net40\ServiceStack.dll</HintPath>
     </Reference>
@@ -79,9 +62,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EDI_Data.cs" />
+    <Compile Include="Operations\EDIDataRepository.cs" />
+    <Compile Include="Operations\FileOperations.cs" />
+    <Compile Include="Models\EDI_Data.cs" />
+    <Compile Include="Models\EDI_Processed_Files.cs" />
+    <Compile Include="Models\InvalidData.cs" />
+    <Compile Include="Operations\ProcessedFiles.cs" />
+    <Compile Include="Operations\SetupDatabase.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Models\ShippingCosts.cs" />
+    <Compile Include="Models\Tracking.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
