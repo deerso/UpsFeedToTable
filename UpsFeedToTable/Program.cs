@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ServiceStack;
 using ServiceStack.Text;
 
 namespace UpsFeedToTable
@@ -27,35 +28,34 @@ namespace UpsFeedToTable
 
             var rows = File.ReadLines(testFileName).Select(x => x.Split(new[] {','})).Select(x => new EDI_Data 
             {
-                
                 RecipientNumber = x[1],
                 AccountNumber = x[2],
                 AccountCountry = x[3],
-                InvoiceDate = DateTime.Parse(x[4]),
+                InvoiceDate = ParseDateTime(x[4]),
                 InvoiceNumber = x[5],
                 InvoiceTypeCode = x[6],
                 InvoiceTypeDetailCode = x[7],
                 AccountTaxId = x[8],
                 InvoiceCurrencyCode = x[9],
-                InvoiceAmount = decimal.Parse(x[10]),
-                TransactionDate = DateTime.Parse(x[11]),
+                InvoiceAmount = ParseDecimal(x[10]),
+                TransactionDate = ParseDateTime(x[11]),
                 PickupRecordNumber = x[12],
                 LeadShipmentNumber = x[13],
                 WorldEaseNumber =  x[14],
                 ShipmentReferenceNumber1 = x[15],
                 ShipmentReferenceNumber2 = x[16],
                 BillOptionCode = x[17],
-                PackageQuantity = int.Parse(x[18]),
-                OversizeQuantity = int.Parse(x[19]),
+                PackageQuantity = ParseInt(x[18]),
+                OversizeQuantity = ParseInt(x[19]),
                 TrackingNumber = x[20],
                 PackageReferenceNumber1 = x[21],
                 PackageReferenceNumber2 = x[22],
                 PackageReferenceNumber3 = x[23],
                 PackageReferenceNumber4 = x[24],
                 PackageReferenceNumber5 = x[25],
-                EnteredWeight = decimal.Parse(x[26]),
+                EnteredWeight = ParseDecimal(x[26]),
                 EnteredWeightUnitOfMeasure = x[27],
-                BilledWeight = decimal.Parse(x[28]),
+                BilledWeight = ParseDecimal(x[28]),
                 BilledWeightUnitOfMeasure = x[29],
                 ContainerType = x[30],
                 BilledWeightType = x[31],
@@ -73,23 +73,23 @@ namespace UpsFeedToTable
                 ChargeClassificationCode = x[43],
                 ChargeDescriptionCode = x[44],
                 ChargeDescription = x[45],
-                ChargedUnitQuantity = int.Parse(x[46]),
+                ChargedUnitQuantity = ParseInt(x[46]),
                 BasisCurrencyCode = x[47],
                 BasisValue = x[48],
                 TaxIndicator = x[49],
                 TransactionCurrencyCode = x[50],
-                IncentiveAmount = decimal.Parse(x[51]),
-                NetAmount = decimal.Parse(x[52]),
+                IncentiveAmount = ParseDecimal(x[51]),
+                NetAmount = ParseDecimal(x[52]),
                 MiscellaneousCurrencyCode = x[53],
-                MiscellaneousIncentiveAmount = decimal.Parse(x[54]),
-                MiscellaneousNetAmount = decimal.Parse(x[55]),
+                MiscellaneousIncentiveAmount = ParseDecimal(x[54]),
+                MiscellaneousNetAmount = ParseDecimal(x[55]),
                 AlternateInvoicingCurrencyCode = x[56],
-                AlternateInvoiceAmount = decimal.Parse(x[57]),
-                InvoiceExchangeRate = decimal.Parse(x[58]),
-                TaxVarianceAmount = decimal.Parse(x[59]),
-                CurrencyVarianceAmount = decimal.Parse(x[60]),
-                InvoiceLevelCharge = decimal.Parse(x[61]),
-                InvoiceDueDate = DateTime.Parse(x[62]),
+                AlternateInvoiceAmount = ParseDecimal(x[57]),
+                InvoiceExchangeRate = ParseDecimal(x[58]),
+                TaxVarianceAmount = ParseDecimal(x[59]),
+                CurrencyVarianceAmount = ParseDecimal(x[60]),
+                InvoiceLevelCharge = ParseDecimal(x[61]),
+                InvoiceDueDate = ParseDateTime(x[62]),
                 AlternateInvoiceNumber = x[63],
                 StoreNumber = x[64],
                 CustomerReferenceNumber = x[65],
@@ -143,35 +143,35 @@ namespace UpsFeedToTable
                 MiscellaneousAddress2State = x[113],
                 MiscellaneousAddress2Postal = x[114],
                 MiscellaneousAddress2Country = x[115],
-                ShipmentDate = DateTime.Parse(x[116]),
-                ShipmentExportDate = DateTime.Parse(x[117]),
-                ShipmentImportDate = DateTime.Parse(x[118]),
-                EntryDate = DateTime.Parse(x[119]),
-                DirectShipmentDate = DateTime.Parse(x[120]),
+                ShipmentDate = ParseDateTime(x[116]),
+                ShipmentExportDate = ParseDateTime(x[117]),
+                ShipmentImportDate = ParseDateTime(x[118]),
+                EntryDate = ParseDateTime(x[119]),
+                DirectShipmentDate = ParseDateTime(x[120]),
                 ShipmentDeliveryDate =x[121],
-                ShipmentReleaseDate = DateTime.Parse(x[122]),
+                ShipmentReleaseDate = ParseDateTime(x[122]),
                 CycleDate = x[123],
                 EFTDate = x[124],
                 ValidationDate = x[125],
                 EntryPort = x[126],
                 EntryNumber = x[127],
                 ExportPlace = x[128],
-                ShipmentValueAmount = decimal.Parse(x[129]),
+                ShipmentValueAmount = ParseDecimal(x[129]),
                 ShipmentDescription = x[130],
                 EnteredCurrencyCode = x[131],
                 CustomsNumber = x[132],
-                ExchangeRate = decimal.Parse(x[133]),
+                ExchangeRate = ParseDecimal(x[133]),
                 MasterAirWayBillNumber = x[134],
                 EPU = x[135],
                 EntryType = x[136],
                 CPCCode = x[137],
-                LineItemNumber = int.Parse(x[138]),
+                LineItemNumber = ParseInt(x[138]),
                 GoodsDescription = x[139],
-                EnteredValue = decimal.Parse(x[140]),
-                DutyAmount = decimal.Parse(x[141]),
+                EnteredValue = ParseDecimal(x[140]),
+                DutyAmount = ParseDecimal(x[141]),
                 Weight = x[142],
                 UnitOfMeasure = x[143],
-                ItemQuantity = int.Parse(x[144]),
+                ItemQuantity = ParseInt(x[144]),
                 ItemQuantityUnitOfMeasure = x[145],
                 ImportTaxId = x[146],
                 DeclarationNumber = x[147],
@@ -183,24 +183,24 @@ namespace UpsFeedToTable
                 TransportMode = x[153],
                 TaxType = x[154],
                 TariffCode = x[155],
-                TariffRate = decimal.Parse(x[156]),
+                TariffRate = ParseDecimal(x[156]),
                 TariffTreatmentNumber = x[157],
                 ContactName = x[158],
                 ClassNumber = x[159],
                 DocumentType = x[160],
                 OfficeNumber = x[161],
                 DocumentNumber = x[162],
-                DutyValue = decimal.Parse(x[163]),
-                TotalValueForDuty = decimal.Parse(x[164]),
-                ExciseTaxAmount = decimal.Parse(x[165]),
-                ExciseTaxRate = decimal.Parse(x[166]),
-                GSTAmount = decimal.Parse(x[167]),
-                GSTRate = decimal.Parse(x[168]),
+                DutyValue = ParseDecimal(x[163]),
+                TotalValueForDuty = ParseDecimal(x[164]),
+                ExciseTaxAmount = ParseDecimal(x[165]),
+                ExciseTaxRate = ParseDecimal(x[166]),
+                GSTAmount = ParseDecimal(x[167]),
+                GSTRate = ParseDecimal(x[168]),
                 OrderInCouncil = x[169],
                 OriginCountry = x[170],
-                SIMAAccess = decimal.Parse(x[171]),
-                TaxValue = decimal.Parse(x[172]),
-                TotalCustomsAmount = decimal.Parse(x[173]),
+                SIMAAccess = ParseDecimal(x[171]),
+                TaxValue = ParseDecimal(x[172]),
+                TotalCustomsAmount = ParseDecimal(x[173]),
                 MiscellaneousLine1 = x[174],
                 MiscellaneousLine2 = x[175],
                 MiscellaneousLine3 = x[176],
@@ -212,23 +212,23 @@ namespace UpsFeedToTable
                 MiscellaneousLine9 = x[182],
                 MiscellaneousLine10 = x[183],
                 MiscellaneousLine11 = x[184],
-                DutyRate = decimal.Parse(x[185]),
-                VATBasisAmount = decimal.Parse(x[186]),
-                VATAmount = decimal.Parse(x[187]),
-                VATRate = decimal.Parse(x[188]),
-                OtherBasisAmount = decimal.Parse(x[189]),
-                OtherAmount = decimal.Parse(x[190]),
-                OtherRate = decimal.Parse(x[191]),
+                DutyRate = ParseDecimal(x[185]),
+                VATBasisAmount = ParseDecimal(x[186]),
+                VATAmount = ParseDecimal(x[187]),
+                VATRate = ParseDecimal(x[188]),
+                OtherBasisAmount = ParseDecimal(x[189]),
+                OtherAmount = ParseDecimal(x[190]),
+                OtherRate = ParseDecimal(x[191]),
                 OtherCustomsNumberIndicator = x[192],
                 OtherCustomsNumber = x[193],
                 CustomsOfficeName = x[194],
                 PackageDimensionUnitOfMeasure = x[195],
-                OriginalShipmentPackageQuantity = int.Parse(x[196]),
+                OriginalShipmentPackageQuantity = ParseInt(x[196]),
                 CorrectedZone = x[197],
                 TaxLawArticleNumber = x[198],
-                TaxLawArticleBasisAmount = decimal.Parse(x[199]),
+                TaxLawArticleBasisAmount = ParseDecimal(x[199]),
                 OriginalTrackingNumber = x[200],
-                ScaleWeightQuantity = decimal.Parse(x[201]),
+                ScaleWeightQuantity = ParseDecimal(x[201]),
                 ScaleWeightUnitOfMeasure = x[202],
                 RawDimensionsUnitOfMeasure = x[203],
                 RawDimensions = x[204],
@@ -249,7 +249,7 @@ namespace UpsFeedToTable
                 PO10 = x[219],
                 NMFC = x[220],
                 DetailClass = x[221],
-                FreightSequenceNumber = int.Parse(x[222]),
+                FreightSequenceNumber = ParseInt(x[222]),
                 DeclaredFreightClass = x[223],
                 EORINumber = x[224],
                 DetailKeyedDim = x[225],
@@ -260,6 +260,29 @@ namespace UpsFeedToTable
             });
 
             Console.WriteLine(rows.FirstOrDefault().Dump());
+        }
+
+        public static decimal ParseDecimal(string s)
+        {
+            var value = decimal.Zero;
+
+            decimal.TryParse(s, out value);
+
+            return value;
+        }
+
+        public static int ParseInt(string s)
+        {
+            var value = 0;
+            int.TryParse(s, out value);
+            return value;
+        }
+
+        public static DateTime? ParseDateTime(string s)
+        {
+            if (s.IsNullOrEmpty())
+                return null;
+            return DateTime.Parse(s);
         }
     }
 

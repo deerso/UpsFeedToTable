@@ -25,7 +25,7 @@ namespace UpsFeedToTable
         [StringLength(2)]
         public string AccountCountry { get; set; }
 
-        public DateTime InvoiceDate { get; set; }
+        public DateTime? InvoiceDate { get; set; }
 
         [StringLength(15)]
         public string InvoiceNumber { get; set; }
@@ -44,7 +44,7 @@ namespace UpsFeedToTable
 
         public decimal InvoiceAmount { get; set; }
 
-        public DateTime TransactionDate { get; set; }
+        public DateTime? TransactionDate { get; set; }
 
         [StringLength(10)]
         public string PickupRecordNumber { get; set; }
@@ -179,7 +179,7 @@ namespace UpsFeedToTable
         public decimal CurrencyVarianceAmount { get; set; }
         public decimal InvoiceLevelCharge { get; set; }
 
-        public DateTime InvoiceDueDate { get; set; }
+        public DateTime? InvoiceDueDate { get; set; }
 
         [StringLength(15)]
         public string AlternateInvoiceNumber { get; set; }
@@ -340,19 +340,19 @@ namespace UpsFeedToTable
         [StringLength(2)]
         public string MiscellaneousAddress2Country { get; set; }
 
-        public DateTime ShipmentDate { get; set; }
+        public DateTime? ShipmentDate { get; set; }
 
-        public DateTime ShipmentExportDate { get; set; }
+        public DateTime? ShipmentExportDate { get; set; }
 
-        public DateTime ShipmentImportDate { get; set; }
-        public DateTime EntryDate { get; set; }
-        public DateTime DirectShipmentDate { get; set; }
+        public DateTime? ShipmentImportDate { get; set; }
+        public DateTime? EntryDate { get; set; }
+        public DateTime? DirectShipmentDate { get; set; }
 
         //weird, this is string according to UPS xls
         [StringLength(50)]
         public string ShipmentDeliveryDate { get; set; }
 
-        public DateTime ShipmentReleaseDate { get; set; }
+        public DateTime? ShipmentReleaseDate { get; set; }
 
         [StringLength(50)]
         public string CycleDate { get; set; }
