@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using FastMember;
 using ServiceStack.OrmLite;
 using UpsFeedToTable.Models;
 
@@ -29,31 +30,39 @@ namespace UpsFeedToTable.Operations
             Db.InsertAll(data);
         }
 
+        public int GetOrderNumber(EDI_Data data)
+        {
+            int iOrderNumber = 0;
+
+            int.TryParse(data.ShipmentReferenceNumber1, out iOrderNumber);
+            if (iOrderNumber > 3921)
+                return iOrderNumber;
+            int.TryParse(data.ShipmentReferenceNumber2, out iOrderNumber);
+            if (iOrderNumber > 3921)
+                return iOrderNumber;
+
+            int.TryParse(data.PackageReferenceNumber1, out iOrderNumber);
+            if (iOrderNumber > 3921)
+                return iOrderNumber;
+            int.TryParse(data.PackageReferenceNumber2, out iOrderNumber);
+            if (iOrderNumber > 3921)
+                return iOrderNumber;
+
+            var item = Db.Single<Tracking>(x => x.TrackingId == data.TrackingNumber);
+            if (item != null)
+                return item.OrderNum;
+
+            return 0;
+        }
         public List<ShippingCosts> GetShippingRecords()
         {
-            var tuple = EdiData.Select(x => new Tuple<string, ShippingCosts>(x.TrackingNumber, new ShippingCosts
+            return EdiData.Select(x => new ShippingCosts
             {
                 Amount = x.NetAmount,
-                OrderNumber = FileOperations.ParseInt(x.ShipmentReferenceNumber1),
+                OrderNumber = GetOrderNumber(x),
                 ChargeDescCode = x.ChargeDescriptionCode,
                 ChargeDesc = x.ChargeDescription
-            })).ToList();
-
-            var goodItems = tuple.Where(x => x.Item2.OrderNumber > 0 && x.Item2.OrderNumber != 3921).Select(x => x.Item2).ToList();
-
-            //attempt to get order number from tracking table
-            var correctedItems =
-                tuple.Where(x => x.Item2.OrderNumber == 0 || x.Item2.OrderNumber == 3921).Select(x => new ShippingCosts
-                {
-                    Amount = x.Item2.Amount,
-                    OrderNumber = GetOrderNumberFromTrackingNumber(x.Item1),
-                    ChargeDescCode = x.Item2.ChargeDescCode,
-                    ChargeDesc = x.Item2.ChargeDesc
-                }).ToList();
-
-            goodItems.AddRange(correctedItems);
-
-            return goodItems;
+            }).ToList();
         }
 
         //move this
@@ -73,6 +82,7 @@ namespace UpsFeedToTable.Operations
                 if (s.OrderNumber == 0)
                 {
                     InsertInvalidData(s, processedFileId, "Couldn't find order number");
+                    badCount++;
                     continue;
                 }
                 try

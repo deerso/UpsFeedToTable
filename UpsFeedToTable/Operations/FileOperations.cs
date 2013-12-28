@@ -40,9 +40,7 @@ namespace UpsFeedToTable
         public static IEnumerable<EDI_Data> GetDataForFile(string filename)
         {
             var lines = File.ReadLines(filename);
-
             var data = lines.Select(x => Regex.Split(x, ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"));
-
             return data.Select(x => new EDI_Data
             {
                 Version = x[0],
@@ -276,13 +274,6 @@ namespace UpsFeedToTable
                 DetailKeyedBilledUnitOfMeasure = x[228],
                 OriginalServiceDescription = x[229],
             });
-        }
-        public static string GetFile(string fileName)
-        {
-            using (StreamReader reader = new StreamReader(new FileStream(fileName, FileMode.Open)))
-            {
-                return reader.ReadToEnd();
-            }
         }
 
         public static IEnumerable<string> GetFilesToBeProcessed(string filesDirectory, IEnumerable<string> processedFiles)

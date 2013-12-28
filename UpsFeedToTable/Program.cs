@@ -57,24 +57,7 @@ namespace UpsFeedToTable
                     "Found {0} new files to be processed".FormatWith(filesToBeProccessed.Count()).Print();
 
 
-                    filesToBeProccessed.Each(filename =>
-                    {
-                        var filePath = Path.Combine(filesDirectory, filename);
-                        "Processing {0}".FormatWith(filename).Print();
-
-                        EdiDataRepo.EdiData = FileOperations.GetDataForFile(filePath).ToList();
-                        EdiDataRepo.InsertMany(EdiDataRepo.EdiData);
-                        "Inserted {0} Entries".FormatWith(EdiDataRepo.EdiDataCount).Print();
-                        
-
-                        var shippingRecords = EdiDataRepo.GetShippingRecords();
-                        var fileId = ProcessedFilesRepo.InsertProcessedFile(filePath, filename, EdiDataRepo.EdiDataCount);
-                        var counts = EdiDataRepo.InsertShippingCosts(shippingRecords, fileId);
-                        "Inserted {0} records into Logistics.ShippingCosts, and {1} records into Logistics.InvalidData"
-                            .FormatWith(counts.Item1, counts.Item2).Print();
-
-                        ProcessedFilesRepo.UpdateFileCount(counts.Item1 +counts.Item2, fileId);
-                    });
+                    filesToBeProccessed.Each(filename => ProcessFile(filename, filesDirectory));
                 }
             }
             catch (SqlException x)
@@ -83,6 +66,31 @@ namespace UpsFeedToTable
 
                 x.Message.PrintDump();
             }
+        }
+
+        private void ProcessFile(string filename, string filesDirectory)
+        {
+            var filePath = Path.Combine(filesDirectory, filename);
+            Console.Write("\n\n");
+            Console.Write("Processing {0}...".FormatWith(filename));
+
+            EdiDataRepo.EdiData = FileOperations.GetDataForFile(filePath).ToList();
+            Console.Write("Done\n");
+            Console.Write("Inserting Records into database...");
+            EdiDataRepo.InsertMany(EdiDataRepo.EdiData);
+            Console.Write("Done.  Inserted {0} Entries".FormatWith(EdiDataRepo.EdiDataCount));
+            
+            Console.Write("Transforming data to Shipping Records...");
+            var shippingRecords = EdiDataRepo.GetShippingRecords();
+            Console.Write("Done\n");
+            var fileId = ProcessedFilesRepo.InsertProcessedFile(filePath, filename, EdiDataRepo.EdiDataCount);
+            Console.Write("Inserting Shipping Costs Records...");
+            var counts = EdiDataRepo.InsertShippingCosts(shippingRecords, fileId);
+            Console.Write("Done. Inserted {0} records into Logistics.ShippingCosts, and {1} records into Logistics.InvalidData"
+                .FormatWith(counts.Item1, counts.Item2));
+
+
+            ProcessedFilesRepo.UpdateFileCount(counts.Item1 +counts.Item2, fileId);
         }
     }
 }
