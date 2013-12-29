@@ -7,6 +7,18 @@ namespace UpsFeedToTable.Models
     [Alias("EDI_ProcessedFiles")]
     public class EDI_Processed_Files
     {
+        public EDI_Processed_Files()
+        {
+            
+        }
+
+        public EDI_Processed_Files(string processedFile, string originalFileLocation, int recordsInserted)
+        {
+            ProcessedFile = processedFile;
+            OriginalFileLocation = originalFileLocation;
+            DateProcessed = DateTime.Now;
+            RecordsInserted = recordsInserted;
+        }
         [AutoIncrement]
         public int Id { get; set; } 
 

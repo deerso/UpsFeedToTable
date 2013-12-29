@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpsFeedToTable", "UpsFeedToTable\UpsFeedToTable.csproj", "{2CE08EF1-51EA-4064-811B-1969470554DD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UPS.Models", "UPS.Models\UPS.Models.csproj", "{BF738CC8-2172-4DB3-9D4F-7C11F16985E4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{2CE08EF1-51EA-4064-811B-1969470554DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CE08EF1-51EA-4064-811B-1969470554DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CE08EF1-51EA-4064-811B-1969470554DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF738CC8-2172-4DB3-9D4F-7C11F16985E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF738CC8-2172-4DB3-9D4F-7C11F16985E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF738CC8-2172-4DB3-9D4F-7C11F16985E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF738CC8-2172-4DB3-9D4F-7C11F16985E4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

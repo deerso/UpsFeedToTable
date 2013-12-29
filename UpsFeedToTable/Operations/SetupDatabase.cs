@@ -11,23 +11,39 @@ namespace UpsFeedToTable.Operations
     {
         public static void Setup(IDbConnection connection)
         {
-            var dropCreateTables = ConfigUtils.GetAppSetting("DropCreateEditedTables", false);
-            "Setting up Database Tables, Drop-Recreate-Tables={0}".Print(dropCreateTables);
+            var dropCreateTables = ConfigUtils.GetListFromAppSetting("DropCreateTables");
+            "Setting up Database Tables".Print();
+            "DropCreateTables::".Print();
+            dropCreateTables.PrintDump();
            
             CreateSchemaIfNotExist(connection, "UPS");
             CreateSchemaIfNotExist(connection, "Logistics");
 
-            if (dropCreateTables)
+            if (dropCreateTables.Contains("Logistics.InvalidData"))
             {
+                "Dropping Invalid Data".Print();
                 connection.DropTable<InvalidData>();
+            }
+            if (dropCreateTables.Contains("UPS.EDI_ProcssedFiles"))
+            {
+                "Dropping EDI_Processed_Files".Print();
                 connection.DropTable<EDI_Processed_Files>();
+            }
+            if (dropCreateTables.Contains("UPS.EDI_Data"))
+            {
+                "Dropping EDI_Data".Print();
                 connection.DropTable<EDI_Data>();
             }
-            connection.CreateTable<Models.EDI_Data>(dropCreateTables);
-            connection.CreateTable<Models.EDI_Processed_Files>(dropCreateTables);
-            connection.CreateTable<Models.ShippingCosts>(dropCreateTables);
+            if (dropCreateTables.Contains("Logistics.ShippingCosts"))
+            {
+                "Dropping ShippingCoss".Print();
+                connection.DropTable<ShippingCosts>();
+            }
+            connection.CreateTable<Models.EDI_Data>();
+            connection.CreateTable<Models.EDI_Processed_Files>();
+            connection.CreateTable<Models.ShippingCosts>();
             connection.CreateTableIfNotExists<Models.Tracking>();
-            connection.CreateTable<Models.InvalidData>(dropCreateTables);
+            connection.CreateTable<Models.InvalidData>();
         }
 
         public static void CreateSchemaIfNotExist(IDbConnection connection, string schemaName)

@@ -32,8 +32,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Deerso.Data.OrmLite">
+      <HintPath>..\packages\Deerso.Data.OrmLite.1.3.0\lib\net45\Deerso.Data.OrmLite.dll</HintPath>
+    </Reference>
     <Reference Include="FastMember">
       <HintPath>..\packages\FastMember.1.0.0.11\lib\net40\FastMember.dll</HintPath>
+    </Reference>
+    <Reference Include="MomentX">
+      <HintPath>..\..\MomentX\MomentX\MomentX\bin\Debug\MomentX.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack">
       <HintPath>..\packages\ServiceStack.4.0.5\lib\net40\ServiceStack.dll</HintPath>
@@ -65,17 +71,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Operations\EDIDataRepository.cs" />
     <Compile Include="Operations\FileOperations.cs" />
     <Compile Include="Models\EDI_Data.cs" />
     <Compile Include="Models\EDI_Processed_Files.cs" />
     <Compile Include="Models\InvalidData.cs" />
     <Compile Include="Operations\ProcessedFiles.cs" />
     <Compile Include="Operations\SetupDatabase.cs" />
+    <Compile Include="Operations\ShippingCostsRepo.cs" />
+    <Compile Include="Operations\TrackingRepo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\ShippingCosts.cs" />
     <Compile Include="Models\Tracking.cs" />
+    <Compile Include="Repos.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

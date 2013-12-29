@@ -1,0 +1,134 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using ServiceStack.OrmLite;
+using UpsFeedToTable.Models;
+
+namespace UpsFeedToTable.Operations
+{
+    public class EDIDataRepository
+    {
+        protected IDbConnection Db { get; set; }
+        public List<EDI_Data> EdiData { get; set; }
+
+        public int EdiDataCount
+        {
+            get { return EdiData.Count; }
+        }
+
+        public EDIDataRepository(IDbConnection db)
+        {
+            Db = db;
+        }
+
+        public void InsertMany(IEnumerable<EDI_Data> data)
+        {
+            Db.Insert(data.First());
+            var sql =Db.GetLastSql();
+            var sql = @"INSERT INTO [UPS].[EDI_Data] ("Version","RecipientNumber","AccountNumber","AccountCountry","InvoiceDate","InvoiceNumber","InvoiceTypeCode","InvoiceTypeDetailCode","AccountTaxId","InvoiceCurrencyCode","InvoiceAmount","TransactionDate","PickupRecordNumber","LeadShipmentNumber","WorldEaseNumber","ShipmentReferenceNumber1","ShipmentReferenceNumber2","BillOptionCode","PackageQuantity","OversizeQuantity","TrackingNumber","PackageReferenceNumber1","PackageReferenceNumber2","PackageReferenceNumber3","PackageReferenceNumber4","PackageReferenceNumber5","EnteredWeight","EnteredWeightUnitOfMeasure","BilledWeight","BilledWeightUnitOfMeasure","ContainerType","BilledWeightType","PackageDimensions","Zone","ChargeCategoryCode","ChargeCategoryDetailCode","ChargeSource","TypeCode1","TypeDetailCode1","TypeDetailValue1","TypeCode2","TypeDetailCode2","TypeDetailValue2","ChargeClassificationCode","ChargeDescriptionCode","ChargeDescription","ChargedUnitQuantity","BasisCurrencyCode","BasisValue","TaxIndicator","TransactionCurrencyCode","IncentiveAmount","NetAmount","MiscellaneousCurrencyCode","MiscellaneousIncentiveAmount","MiscellaneousNetAmount","AlternateInvoicingCurrencyCode","AlternateInvoiceAmount","InvoiceExchangeRate","TaxVarianceAmount","CurrencyVarianceAmount","InvoiceLevelCharge","InvoiceDueDate","AlternateInvoiceNumber","StoreNumber","CustomerReferenceNumber","SenderName","SenderCompanyName","SenderAddressLine1","SenderAddressLine2","SenderCity","SenderState","SenderPostal","SenderCountry","ReceiverName","ReceiverCompanyName","ReceiverAddressLine1","ReceiverAddressLine2","ReceiverCity","ReceiverState","ReceiverPostal","ReceiverCountry","ThirdPartyName","ThirdPartyCompanyName","ThirdPartyAddressLine1","ThirdPartyAddressLine2","ThirdPartyCity","ThirdPartyState","ThirdPartyPostal","ThirdPartyCountry","SoldToName","SoldToCompanyName","SoldToAddressLine1","SoldToAddressLine2","SoldToCity","SoldToState","SoldToPostal","SoldToCountry","MiscellaneousAddressQual1","MiscellaneousAddress1Name","MiscellaneousAddress1CompanyName","MiscellaneousAddress1AddressLine1","MiscellaneousAddress1AddressLine2","MiscellaneousAddress1City","MiscellaneousAddress1State","MiscellaneousAddress1Postal","MiscellaneousAddress1Country","MiscellaneousAddressQual2","MiscellaneousAddress2Name","MiscellaneousAddress2CompanyName","MiscellaneousAddress2AddressLine1","MiscellaneousAddress2AddressLine2","MiscellaneousAddress2City","MiscellaneousAddress2State","MiscellaneousAddress2Postal","MiscellaneousAddress2Country","ShipmentDate","ShipmentExportDate","ShipmentImportDate","EntryDate","DirectShipmentDate","ShipmentDeliveryDate","ShipmentReleaseDate","CycleDate","EFTDate","ValidationDate","EntryPort","EntryNumber","ExportPlace","ShipmentValueAmount","ShipmentDescription","EnteredCurrencyCode","CustomsNumber","ExchangeRate","MasterAirWayBillNumber","EPU","EntryType","CPCCode","LineItemNumber","GoodsDescription","EnteredValue","DutyAmount","Weight","UnitOfMeasure","ItemQuantity","ItemQuantityUnitOfMeasure","ImportTaxId","DeclarationNumber","CarrierName","CCCDNumber","CycleNumber","ForeignTradeReferenceNumber","JobNumber","TransportMode","TaxType","TariffCode","TariffRate","TariffTreatmentNumber","ContactName","ClassNumber","DocumentType","OfficeNumber","DocumentNumber","DutyValue","TotalValueForDuty","ExciseTaxAmount","ExciseTaxRate","GSTAmount","GSTRate","OrderInCouncil","OriginCountry","SIMAAccess","TaxValue","TotalCustomsAmount","MiscellaneousLine1","MiscellaneousLine2","MiscellaneousLine3","MiscellaneousLine4","MiscellaneousLine5","PayerRoleCode","MiscellaneousLine7","MiscellaneousLine8","MiscellaneousLine9","MiscellaneousLine10","MiscellaneousLine11","DutyRate","VATBasisAmount","VATAmount","VATRate","OtherBasisAmount","OtherAmount","OtherRate","OtherCustomsNumberIndicator","OtherCustomsNumber","CustomsOfficeName","PackageDimensionUnitOfMeasure","OriginalShipmentPackageQuantity","CorrectedZone","TaxLawArticleNumber","TaxLawArticleBasisAmount","OriginalTrackingNumber","ScaleWeightQuantity","ScaleWeightUnitOfMeasure","RawDimensionsUnitOfMeasure","RawDimensions","BOL1","BOL2","BOL3","BOL4","BOL5","PO1","PO2","PO3","PO4","PO5","PO6","PO7","PO8","PO9","PO10","NMFC","DetailClass","FreightSequenceNumber","DeclaredFreightClass","EORINumber","DetailKeyedDim","DetailKeyedUnitOfMeasure","DetailKeyedBilledDimensions","DetailKeyedBilledUnitOfMeasure","OriginalServiceDescription
+            ") VALUES (@Version,@RecipientNumber,@AccountNumber,@AccountCountry,@InvoiceDate,@InvoiceNumber,@InvoiceTypeCode,@InvoiceTypeDetailCode,@AccountTaxId,@InvoiceCurrencyCode,@InvoiceAmount,@TransactionDate,@PickupRecordNumber,@LeadShipmentNumber,@WorldEaseNumber,@ShipmentReferenceNumber1,@ShipmentReferenceNumber2,@BillOptionCode,@PackageQuantity,@OversizeQuantity,@TrackingNumber,@PackageReferenceNumber1,@PackageReferenceNumber2,@PackageReferenceNumber3,@PackageReferenceNumber4,@PackageReferenceNumber5,@EnteredWeight,@EnteredWeightUnitOfMeasure,@BilledWeight,@BilledWeightUnitOfMeasure,@ContainerType,@BilledWeightType,@PackageDimensions,@Zone,@ChargeCategoryCode,@ChargeCategoryDetailCode,@ChargeSource,@TypeCode1,@TypeDetailCode1,@TypeDetailValue1,@TypeCode2,@TypeDetailCode2,@TypeDetailValue2,@ChargeClassificationCode,@ChargeDescriptionCode,@ChargeDescription,@ChargedUnitQuantity,@BasisCurrencyCode,@BasisValue,@TaxIndicator,@TransactionCurrencyCode,@IncentiveAmount,@NetAmount,@MiscellaneousCurrencyCode,@MiscellaneousIncentiveAmount,@MiscellaneousNetAmount,@AlternateInvoicingCurrencyCode,@AlternateInvoiceAmount,@InvoiceExchangeRate,@TaxVarianceAmount,@CurrencyVarianceAmount,@InvoiceLevelCharge,@InvoiceDueDate,@AlternateInvoiceNumber,@StoreNumber,@CustomerReferenceNumber,@SenderName,@SenderCompanyName,@SenderAddressLine1,@SenderAddressLine2,@SenderCity,@SenderState,@SenderPostal,@SenderCountry,@ReceiverName,@ReceiverCompanyName,@ReceiverAddressLine1,@ReceiverAddressLine2,@ReceiverCity,@ReceiverState,@ReceiverPostal,@ReceiverCountry,@ThirdPartyName,@ThirdPartyCompanyName,@ThirdPartyAddressLine1,@ThirdPartyAddressLine2,@ThirdPartyCity,@ThirdPartyState,@ThirdPartyPostal,@ThirdPartyCountry,@SoldToName,@SoldToCompanyName,@SoldToAddressLine1,@SoldToAddressLine2,@SoldToCity,@SoldToState,@SoldToPostal,@SoldToCountry,@MiscellaneousAddressQual1,@MiscellaneousAddress1Name,@MiscellaneousAddress1CompanyName,@MiscellaneousAddress1AddressLine1,@MiscellaneousAddress1AddressLine2,@MiscellaneousAddress1City,@MiscellaneousAddress1State,@MiscellaneousAddress1Postal,@MiscellaneousAddress1Country,@MiscellaneousAddressQual2,@MiscellaneousAddress2Name,@MiscellaneousAddress2CompanyName,@MiscellaneousAddress2AddressLine1,@MiscellaneousAddress2AddressLine2,@MiscellaneousAddress2City,@MiscellaneousAddress2State,@MiscellaneousAddress2Postal,@MiscellaneousAddress2Country,@ShipmentDate,@ShipmentExportDate,@ShipmentImportDate,@EntryDate,@DirectShipmentDate,@ShipmentDeliveryDate,@ShipmentReleaseDate,@CycleDate,@EFTDate,@ValidationDate,@EntryPort,@EntryNumber,@ExportPlace,@ShipmentValueAmount,@ShipmentDescription,@EnteredCurrencyCode,@CustomsNumber,@ExchangeRate,@MasterAirWayBillNumber,@EPU,@EntryType,@CPCCode,@LineItemNumber,@GoodsDescription,@EnteredValue,@DutyAmount,@Weight,@UnitOfMeasure,@ItemQuantity,@ItemQuantityUnitOfMeasure,@ImportTaxId,@DeclarationNumber,@CarrierName,@CCCDNumber,@CycleNumber,@ForeignTradeReferenceNumber,@JobNumber,@TransportMode,@TaxType,@TariffCode,@TariffRate,@TariffTreatmentNumber,@ContactName,@ClassNumber,@DocumentType,@OfficeNumber,@DocumentNumber,@DutyValue,@TotalValueForDuty,@ExciseTaxAmount,@ExciseTaxRate,@GSTAmount,@GSTRate,@OrderInCouncil,@OriginCountry,@SIMAAccess,@TaxValue,@TotalCustomsAmount,@MiscellaneousLine1,@MiscellaneousLine2,@MiscellaneousLine3,@MiscellaneousLine4,@MiscellaneousLine5,@PayerRoleCode,@MiscellaneousLine7,@MiscellaneousLine8,@MiscellaneousLine9,@MiscellaneousLine10,@MiscellaneousLine11,@DutyRate,@VATBasisAmount,@VATAmount,@VATRate,@OtherBasisAmount,@OtherAmount,@OtherRate,@OtherCustomsNumberIndicator,@OtherCustomsNumber,@CustomsOfficeName,@PackageDimensionUnitOfMeasure,@OriginalShipmentPackageQuantity,@CorrectedZone,@TaxLawArticleNumber,@TaxLawArticleBasisAmount,@OriginalTrackingNumber,@ScaleWeightQuantity,@ScaleWeightUnitOfMeasure,@RawDimensionsUnitOfMeasure,@RawDimensions,@BOL1,@BOL2,@BOL3,@BOL4,@BOL5,@PO1,@PO2,@PO3,@PO4,@PO5,@PO6,@PO7,@PO8,@PO9,@PO10,@NMFC,@DetailClass,@FreightSequenceNumber,@DeclaredFreightClass,@EORINumber,@DetailKeyedDim,@DetailKeyedUnitOfMeasure,@DetailKeyedBilledDimensions,@DetailKeyedBilledUnitOfMeasure,@OriginalServiceDescription)";
+
+            Console.WriteLine(sql);
+        }
+
+        public int GetOrderNumber(EDI_Data data)
+        {
+            int iOrderNumber = 0;
+
+            int.TryParse(data.ShipmentReferenceNumber1, out iOrderNumber);
+            if (iOrderNumber > 3921)
+                return iOrderNumber;
+            int.TryParse(data.ShipmentReferenceNumber2, out iOrderNumber);
+            if (iOrderNumber > 3921)
+                return iOrderNumber;
+
+            int.TryParse(data.PackageReferenceNumber1, out iOrderNumber);
+            if (iOrderNumber > 3921)
+                return iOrderNumber;
+            int.TryParse(data.PackageReferenceNumber2, out iOrderNumber);
+            if (iOrderNumber > 3921)
+                return iOrderNumber;
+
+            var item = Db.Single<Tracking>(x => x.TrackingId == data.TrackingNumber);
+            if (item != null)
+                return item.OrderNum;
+
+            return 0;
+        }
+        public List<ShippingCosts> GetShippingRecords()
+        {
+            return EdiData.Select(x => new ShippingCosts
+            {
+                Amount = x.NetAmount,
+                OrderNumber = GetOrderNumber(x),
+                ChargeDescCode = x.ChargeDescriptionCode,
+                ChargeDesc = x.ChargeDescription
+            }).ToList();
+        }
+
+        //move this
+        public int GetOrderNumberFromTrackingNumber(string trackingNumber)
+        {
+            var item = Db.SingleWhere<Tracking>("TrackingId", trackingNumber);
+            return item != null ? item.OrderNum : 0;
+        }
+        //move this
+        public Tuple<int, int> InsertShippingCosts(IEnumerable<ShippingCosts> shippingCosts, long processedFileId)
+        {
+            Db.CreateTableIfNotExists<InvalidData>();
+            var goodCount = 0;
+            var badCount = 0;
+            foreach (var s in shippingCosts)
+            {
+                if (s.OrderNumber == 0)
+                {
+                    InsertInvalidData(s, processedFileId, "Couldn't find order number");
+                    badCount++;
+                    continue;
+                }
+                try
+                {
+                    Db.Insert(s);
+                    goodCount++;
+                }
+                catch (SqlException x)
+                {
+                    string reason = x.Message;
+                    if (x.Errors.Count > 0)
+                    {
+                        switch (x.Errors[0].Number)
+                        {
+                            case 547:
+                                reason = "No OrderNumber Found - Foreign Key Violation";
+                                break;
+                            case 2601:
+                                reason = "Item Already Inserted - Primary Key Violation";
+                                break;
+                        }
+                    }
+                    InsertInvalidData(s, processedFileId, reason);
+                    badCount++;
+                }
+            }
+
+            return new Tuple<int, int>(goodCount, badCount);
+        }
+
+        public void InsertInvalidData(ShippingCosts s, long processedFileId, string reason)
+        {
+            Db.Insert(new InvalidData
+            {
+                Amount = s.Amount,
+                ChargeDesc = s.ChargeDesc,
+                ChargeDescCode = s.ChargeDescCode,
+                OrderNumber = s.OrderNumber,
+                Reason = reason,
+                DateFailed = DateTime.Now,
+                ProcessedFileId = (int)processedFileId
+            });
+        }
+    }
+}
