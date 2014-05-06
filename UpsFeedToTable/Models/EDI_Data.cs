@@ -483,37 +483,37 @@ namespace UpsFeedToTable.Models
         public decimal TaxValue{ get; set; }
         public decimal TotalCustomsAmount { get; set; }
 
-        [StringLength(50)]
+        [StringLength(60)]
         public string MiscellaneousLine1 { get; set; }
 
-        [StringLength(50)]
+        [StringLength(60)]
         public string MiscellaneousLine2 { get; set; }
 
-        [StringLength(50)]
+        [StringLength(60)]
         public string MiscellaneousLine3 { get; set; }
 
-        [StringLength(50)]
+        [StringLength(60)]
         public string MiscellaneousLine4 { get; set; }
 
-        [StringLength(50)]
+        [StringLength(60)]
         public string MiscellaneousLine5 { get; set; }
 
         [StringLength(2)]
         public string PayerRoleCode { get; set; }
 
-        [StringLength(50)]
+        [StringLength(60)]
         public string MiscellaneousLine7 { get; set; }
 
-        [StringLength(50)]
+        [StringLength(60)]
         public string MiscellaneousLine8 { get; set; }
 
-        [StringLength(50)]
+        [StringLength(60)]
         public string MiscellaneousLine9 { get; set; }
 
-        [StringLength(50)]
+        [StringLength(60)]
         public string MiscellaneousLine10 { get; set; }
 
-        [StringLength(50)]
+        [StringLength(60)]
         public string MiscellaneousLine11 { get; set; }
 
         public decimal DutyRate { get; set; }

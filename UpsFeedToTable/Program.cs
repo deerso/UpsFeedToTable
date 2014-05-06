@@ -7,10 +7,12 @@ using System.Linq;
 using System.Threading;
 using Deerso.Data.OrmLite;
 using Deerso.Data.OrmLite.Contracts;
+using Deerso.Logging;
 using MomentX;
 using ServiceStack;
 using ServiceStack.Configuration;
 using ServiceStack.Data;
+using ServiceStack.Logging;
 using ServiceStack.OrmLite;
 using ServiceStack.OrmLite.SqlServer;
 using ServiceStack.Text;
@@ -23,7 +25,10 @@ namespace UpsFeedToTable
     {
         static void Main()
         {
-            App app = new App();
+            LogManager.LogFactory = new DeersoLogFactory("d6de2449-5940-4d99-8f88-b385a6799d85", true, new [] { "@KyleGobel"});
+
+
+            var app = new App(LogManager.GetLogger(""));
             app.Run();
             Console.WriteLine("Press any key to exit\n");
             Console.ReadKey();
@@ -33,7 +38,13 @@ namespace UpsFeedToTable
 
     public class App
     {
-        protected Repos Repo { get; set; }
+        public Repos Repo { get; set; }
+        public ILog Log { get; set; }
+
+        public App(ILog logger = null)
+        {
+            Log = logger ?? new FileLogger("ediData.log", true, true);
+        }
         public void Run()
         {
             var filesDirectory = ConfigUtils.GetAppSetting("EDIFilesLocation", "");
@@ -44,7 +55,7 @@ namespace UpsFeedToTable
                     .PrintDump();
                 return;
             }
-            
+            "~/myFile".MapHostAbsolutePath();
             IDbConnectionFactory connectionFactory = new OrmLiteConnectionFactory(connectionString, new SqlServerOrmLiteDialectProvider());
             try
             {
@@ -86,6 +97,7 @@ namespace UpsFeedToTable
                 "Error running SQL Operations".PrintDump();
 
                 x.Message.PrintDump();
+
             }
         }
 
@@ -144,7 +156,7 @@ namespace UpsFeedToTable
             Console.Write("Finished in {0}. {1}", time.PrettyTime(), extraMessage);
             Console.ResetColor();
         }
-        private List<ShippingCosts> TransformToShippingCostRecords(IEnumerable<EDI_Data> data)
+        public List<ShippingCosts> TransformToShippingCostRecords(IEnumerable<EDI_Data> data)
         {
             return data.Select(x => new ShippingCosts
             {

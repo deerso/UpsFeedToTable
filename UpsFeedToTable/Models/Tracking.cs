@@ -5,6 +5,7 @@ namespace UpsFeedToTable.Models
     [Schema("dbo")]
     public class Tracking
     {
+        [PrimaryKey]
         [Alias("OrderTrackingID")]
         public int Id { get; set; }
         public int OrderNum { get; set; }
