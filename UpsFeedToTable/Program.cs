@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using Deerso.Data.OrmLite;
-using Deerso.Data.OrmLite.Contracts;
 using Deerso.Logging;
 using MomentX;
 using ServiceStack;
@@ -15,7 +12,6 @@ using ServiceStack.Data;
 using ServiceStack.Logging;
 using ServiceStack.OrmLite;
 using ServiceStack.OrmLite.SqlServer;
-using ServiceStack.Text;
 using UpsFeedToTable.Models;
 using UpsFeedToTable.Operations;
 
@@ -26,13 +22,20 @@ namespace UpsFeedToTable
         static void Main()
         {
             LogManager.LogFactory = new DeersoLogFactory("d6de2449-5940-4d99-8f88-b385a6799d85", true, new [] { "@KyleGobel"});
-
-
-            var app = new App(LogManager.GetLogger(""));
-            app.Run();
-            Console.WriteLine("Press any key to exit\n");
-            Console.ReadKey();
-
+            var logger = LogManager.GetLogger("");
+            
+            logger.Info("Application started");
+            try
+            {
+                var app = new App(logger);
+                app.Run();
+            }
+            catch (Exception x)
+            {
+                logger.Fatal("Fatal global error requires attention: " + x);
+                throw;
+            }
+            logger.Info("Application finished");
         }
     }
 
@@ -51,11 +54,11 @@ namespace UpsFeedToTable
             var connectionString = ConfigUtils.GetConnectionString("databaseConnection");
             if (connectionString.IsNullOrEmpty() || filesDirectory.IsNullOrEmpty())
             {
-                "Invalid settings in App.Config, make sure you have a 'databaseConnection' and 'EDIFilesLocation' specified"
-                    .PrintDump();
+                Log.Error(
+                    "Invalid settings in App.Config, make sure you have a 'databaseConnection' and 'EDIFilesLocation' specified");
+                    
                 return;
             }
-            "~/myFile".MapHostAbsolutePath();
             IDbConnectionFactory connectionFactory = new OrmLiteConnectionFactory(connectionString, new SqlServerOrmLiteDialectProvider());
             try
             {
@@ -63,16 +66,16 @@ namespace UpsFeedToTable
                 using (var db = connectionFactory.Open())
                 {
                     Repo = new Repos(new LiteRepoProvider(db));
-                    SetupDatabase.Setup(db);
+                    //SetupDatabase.Setup(db);
 
                     var processedFiles = Repo.ProcessedFiles.GetAll().Select(x => x.ProcessedFile);
                     var filesToBeProccessed = FileOperations.GetFilesToBeProcessed(filesDirectory, processedFiles).ToList();
                     if (!filesToBeProccessed.Any())
                     {
-                        "No new files to process".Print();
+                        Log.Debug("No new files to process");
                         return;
                     }
-                    "Found {0} new files to be processed".FormatWith(filesToBeProccessed.Count()).Print();
+                    Log.DebugFormat("Found {0} new files to be processed", filesToBeProccessed.Count());
 
                     int counter = 1;
 
@@ -94,10 +97,7 @@ namespace UpsFeedToTable
             }
             catch (SqlException x)
             {
-                "Error running SQL Operations".PrintDump();
-
-                x.Message.PrintDump();
-
+                Log.Fatal("Error running SQL Operations", x);
             }
         }
 
@@ -134,18 +134,12 @@ namespace UpsFeedToTable
                 counts = Repo.ShippingCosts.InsertShippingCosts(Repo.InvalidShippingCosts, shippingRecords, fileId);
             }
 
-            Console.Write("\nInserted {0} records into Logistics.ShippingCosts, and {1} records into Logistics.InvalidData"
-                .FormatWith(counts.Item1, counts.Item2));
-
+            Log.DebugFormat("Inserted {0} records into Logistics.ShippingCosts, and {1} records into Logistics.InvalidData",
+                counts.Item1, counts.Item2);
 
            Repo.ProcessedFiles.UpdateProcessedRecordsCount(counts.Item1 + counts.Item2, fileId);
         }
 
-        private void Sleep10Seconds()
-        {
-            Thread.Sleep(10000);
-            Console.WriteLine("Done Sleeping");
-        }
         private static void ReportTime(TimeSpan time)
         {
             ReportTime(time, "");
